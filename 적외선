@@ -1,0 +1,23 @@
+#include <util/delay.h>
+int infrared = 13;
+int led = 12;
+int detect_delay = 200; // in ms
+
+void setup() {
+  pinMode(led, OUTPUT);
+  pinMode(infrared, INPUT);
+  attachInterrupt(INT0, led_state, FALLING);
+}
+
+void loop() {
+}
+
+// 적외선 센서가 장애물을 감지하면 led 상태가 바뀜
+// Interrupt 디바운싱 적용됨
+void led_state() {
+  _delay_ms(detect_delay);
+  if (digitalRead(infrared) == HIGH) {
+    return;
+  }
+  digitalWrite(led, !digitalRead(led));
+}
